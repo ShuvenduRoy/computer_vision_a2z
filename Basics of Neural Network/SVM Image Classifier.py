@@ -90,8 +90,14 @@ X_test = np.hstack([X_test, np.ones((X_test.shape[0], 1))])
 X_dev = np.hstack([X_dev, np.ones((X_dev.shape[0], 1))])
 
 
+""" Part 3 - Training the model """
+from cs231n.classifiers.linear_svm import svm_loss_naive
+import time
 
+W = np.random.randn(3073, 10) * 0.0001
 
+loss, grad = svm_loss_naive(W, X_dev, y_dev, 0.000005)
+print('loss: %f' % (loss, ))
 
 
 
