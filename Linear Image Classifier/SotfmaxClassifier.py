@@ -9,7 +9,8 @@ plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
 
 
-# Loading the data
+
+""" Loading and preprocessing the data """
 def get_CIFAR10_data(num_training=49000, num_validation=1000, num_test=1000, num_dev=500):
     cifar10_dir = 'cs231n/datasets/cifar-10-batches-py'
     X_train, y_train, X_test, y_test = load_CIFAR10(cifar10_dir)
@@ -53,3 +54,16 @@ def get_CIFAR10_data(num_training=49000, num_validation=1000, num_test=1000, num
 # Invoke the above function to get our data.
 X_train, y_train, X_val, y_val, X_test, y_test, X_dev, y_dev = get_CIFAR10_data()
 
+
+
+
+from cs231n.classifiers.softmax import softmax_loss_naive, softmax_loss_vectorized
+import time
+
+# Generate a random softmax weight matrix and use it to compute the loss.
+W = np.random.randn(3073, 10) * 0.0001
+loss, grad = softmax_loss_vectorized(W, X_dev, y_dev, 0.0)
+
+# As a rough sanity check, our loss should be something close to -log(0.1).
+print('loss: %f' % loss)
+print('sanity check: %f' % (-np.log(0.1)))
