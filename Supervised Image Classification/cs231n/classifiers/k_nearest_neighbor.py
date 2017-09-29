@@ -115,10 +115,10 @@ class KNearestNeighbor(object):
     X = self.X_train
 
     # Reshaping
-    X = X.reshape(X.shape[0], 1, -1)
-    Y = Y.reshape(1, Y.shape[0], -1)    
+    X = X.reshape( 1, X.shape[0], -1)
+    Y = Y.reshape(Y.shape[0], 1, -1)    
     
-    dists = np.sqrt(np.sum(np.square((X-Y)), axis=2))
+    dists = np.sqrt(np.sum(np.square((Y - X)), axis=2))
     
     return dists
 
