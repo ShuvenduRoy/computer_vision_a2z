@@ -144,8 +144,8 @@ class KNearestNeighbor(object):
       # Use the distance matrix to find the k nearest neighbors of the ith    #
       # testing point, and use self.y_train to find the labels of these       #
       # neighbors. Store these labels in closest_y.                           #
-      y_pred = np.argpartition(dists[i], k)
-      closest_y.append(self.y_train[y_pred])
+      nearest_k = np.argpartition(dists[i], k)[:k]
+      closest_y = (self.y_train[nearest_k])
 
       # Now that you have found the labels of the k nearest neighbors, you    #
       # need to find the most common label in the list closest_y of labels.   #
