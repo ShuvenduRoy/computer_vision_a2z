@@ -22,6 +22,8 @@ class KNearestNeighbor(object):
     self.X_train = X
     self.y_train = y
     
+    
+    
   def predict(self, X, k=1, num_loops=0):
     """
     Predict labels for test data using this classifier.
@@ -39,10 +41,13 @@ class KNearestNeighbor(object):
     """
     if num_loops == 0:
       dists = self.compute_distances_no_loops(X)
+      
     elif num_loops == 1:
       dists = self.compute_distances_one_loop(X)
+      
     elif num_loops == 2:
       dists = self.compute_distances_two_loops(X)
+      
     else:
       raise ValueError('Invalid value %d for num_loops' % num_loops)
 
@@ -67,16 +72,11 @@ class KNearestNeighbor(object):
     dists = np.zeros((num_test, num_train))
     for i in xrange(num_test):
       for j in xrange(num_train):
-        #####################################################################
-        # TODO:                                                             #
         # Compute the l2 distance between the ith test point and the jth    #
         # training point, and store the result in dists[i, j]. You should   #
         # not use a loop over dimension.                                    #
-        #####################################################################
-        pass
-        #####################################################################
-        #                       END OF YOUR CODE                            #
-        #####################################################################
+        dists[i, j] = np.sqrt(np.sum(np.square(self.X_train[j] - X[i])))
+        
     return dists
 
   def compute_distances_one_loop(self, X):
@@ -90,15 +90,10 @@ class KNearestNeighbor(object):
     num_train = self.X_train.shape[0]
     dists = np.zeros((num_test, num_train))
     for i in xrange(num_test):
-      #######################################################################
-      # TODO:                                                               #
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
-      #######################################################################
-      pass
-      #######################################################################
-      #                         END OF YOUR CODE                            #
-      #######################################################################
+      dists[i, :] = np.sqrt(np.sum(np.square(self.X_train - X[i: ]), axis=1))
+      
     return dists
 
   def compute_distances_no_loops(self, X):
@@ -108,11 +103,6 @@ class KNearestNeighbor(object):
 
     Input / Output: Same as compute_distances_two_loops
     """
-    num_test = X.shape[0]
-    num_train = self.X_train.shape[0]
-    dists = np.zeros((num_test, num_train)) 
-    #########################################################################
-    # TODO:                                                                 #
     # Compute the l2 distance between all test points and all training      #
     # points without using any explicit loops, and store the result in      #
     # dists.                                                                #
@@ -120,13 +110,16 @@ class KNearestNeighbor(object):
     # You should implement this function using only basic array operations; #
     # in particular you should not use functions from scipy.                #
     #                                                                       #
-    # HINT: Try to formulate the l2 distance using matrix multiplication    #
-    #       and two broadcast sums.                                         #
-    #########################################################################
-    pass
-    #########################################################################
-    #                         END OF YOUR CODE                              #
-    #########################################################################
+    
+    Y = X
+    X = self.X_train
+
+    # Reshaping
+    X = X.reshape(X.shape[0], 1, -1)
+    Y = Y.reshape(1, Y.shape[0], -1)    
+    
+    dists = np.sqrt(np.sum(np.square((X-Y)), axis=2))
+    
     return dists
 
   def predict_labels(self, dists, k=1):
