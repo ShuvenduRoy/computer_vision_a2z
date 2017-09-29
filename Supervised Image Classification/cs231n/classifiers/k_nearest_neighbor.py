@@ -92,7 +92,7 @@ class KNearestNeighbor(object):
     for i in xrange(num_test):
       # Compute the l2 distance between the ith test point and all training #
       # points, and store the result in dists[i, :].                        #
-      dists[i, :] = np.sqrt(np.sum(np.square(self.X_train - X[i: ]), axis=1))
+      dists[i] = np.sqrt(np.sum(np.square(self.X_train - X[i]), axis=1))
       
     return dists
 
