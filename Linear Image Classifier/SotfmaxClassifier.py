@@ -67,3 +67,4 @@ loss, grad = softmax_loss_vectorized(W, X_dev, y_dev, 0.0)
 # As a rough sanity check, our loss should be something close to -log(0.1).
 print('loss: %f' % loss)
 print('sanity check: %f' % (-np.log(0.1)))
+
