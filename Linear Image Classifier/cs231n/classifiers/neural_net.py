@@ -71,15 +71,17 @@ class TwoLayerNet(object):
 
     # Compute the forward pass
     scores = None
-    #############################################################################
-    # TODO: Perform the forward pass, computing the class scores for the input. #
-    # Store the result in the scores variable, which should be an array of      #
-    # shape (N, C).                                                             #
-    #############################################################################
-    pass
-    #############################################################################
-    #                              END OF YOUR CODE                             #
-    #############################################################################
+    
+    #Perform the forward pass, computing the class scores for the input
+    Z1 = np.dot(X, W1) + b1 # NxD DxH
+    # Relu
+    A1 = np.max(Z1, 0)
+    Z2 = np.dot(A1, W2) + b2
+    # Softmax
+    A2 = 1/(1+np.exp(-Z2))
+    
+    scores = A2
+    
     
     # If the targets are not given then jump out, we're done
     if y is None:
