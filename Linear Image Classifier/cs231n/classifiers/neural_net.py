@@ -89,16 +89,14 @@ class TwoLayerNet(object):
 
     # Compute the loss
     loss = None
-    #############################################################################
-    # TODO: Finish the forward pass, and compute the loss. This should include  #
+    # Finish the forward pass, and compute the loss. This should include  #
     # both the data loss and L2 regularization for W1 and W2. Store the result  #
     # in the variable loss, which should be a scalar. Use the Softmax           #
     # classifier loss.                                                          #
-    #############################################################################
-    pass
-    #############################################################################
-    #                              END OF YOUR CODE                             #
-    #############################################################################
+    loss = np.sum(scores - y) / N
+    # regularization loss
+    loss += reg/(2 * N) * np.sum(np.square(W1))
+    loss += reg/(2 * N) * np.sum(np.square(W2))
 
     # Backward pass: compute gradients
     grads = {}
