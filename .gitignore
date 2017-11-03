@@ -1,8 +1,7 @@
-data/*
-dataset/*
-datasets/*
+data/
+dataset/
 datasets/
 data/
-__pycache__/*
-.ipynb_checkpoints/*
+__pycache__/
 .ipynb_checkpoints/
+
