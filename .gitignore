@@ -5,4 +5,4 @@ data/
 __pycache__/
 .ipynb_checkpoints/
 ResNet50.h5
-
+model.h5
