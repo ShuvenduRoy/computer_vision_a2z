@@ -51,7 +51,7 @@ class DetectionLayer(nn.Module):
 def create_modules(blocks):
     net_info = blocks[0]  # Captures the information about the input and pre-processing
     module_list = nn.ModuleList()
-    prev_filters = 3
+    prev_filters = 3  # in_channels
     output_filters = []
 
     for index, x in enumerate(blocks[1:]):
@@ -84,7 +84,7 @@ def create_modules(blocks):
             # Add the convolutional layer
             conv = nn.Conv2d(prev_filters, filters, kernel_size, stride, pad, bias=bias)
             module.add_module("conv_{0}".format(index), conv)
-
+                                 
             # Add the Batch Norm Layer
             if batch_normalize:
                 bn = nn.BatchNorm2d(filters)
@@ -120,6 +120,8 @@ def create_modules(blocks):
                 end = end - index
             route = EmptyLayer()
             module.add_module("route_{0}".format(index), route)
+            
+            #  updates the filters variable to hold the number of filters outputted by a route layer
             if end < 0:
                 filters = output_filters[index + start] + output_filters[index + end]
             else:
@@ -149,6 +151,56 @@ def create_modules(blocks):
 
     return (net_info, module_list)
 
+class Darknet(nn.Module):
+    def __init__(self, cfgfile):
+        super(Darknet, self).__init__()
+        self.blocks = parse_cfg(cfgfile)
+        self.net_info, self.module_list = create_modules(self.blocks)
+        
+    def forward(self, x, CUDA):
+        modules = self.blocks[1:]
+        outputs = {}   #We cache the outputs for the route layer
+        
+        write = 0     #This is explained a bit later
+        for i, module in enumerate(modules):        
+            module_type = (module["type"])
+            
+            if module_type == "convolutional" or module_type == "upsample":
+                x = self.module_list[i](x)
+            
+            elif module_type == "route":
+                layers = module["layers"]
+                layers = [int(a) for a in layers]
+    
+                if (layers[0]) > 0:
+                    layers[0] = layers[0] - i
+    
+                if len(layers) == 1:
+                    x = outputs[i + (layers[0])]
+    
+                else:
+                    if (layers[1]) > 0:
+                        layers[1] = layers[1] - i
+    
+                    map1 = outputs[i + layers[0]]
+                    map2 = outputs[i + layers[1]]
+    
+                    x = torch.cat((map1, map2), 1)
+    
+            elif  module_type == "shortcut":
+                from_ = int(module["from"])
+                x = outputs[i-1] + outputs[i+from_]
 
-# blocks = parse_cfg("cfg/yolov3.cfg")
-# print(create_modules(blocks))
+
+if __name__ == '__main__':
+     blocks = parse_cfg("cfg/yolov3.cfg")
+     print(create_modules(blocks))
+
+
+
+
+
+
+
+
+
