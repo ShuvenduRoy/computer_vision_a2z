@@ -7,6 +7,9 @@ Implemantation of deeplearning algorithm for computer vision
 - [Using pretrained model](Convolutional%20Neural%20Network/Using_pretrained_convnet.ipynb)
 - Residual Neural network [[ Pytorch](Residual%20Neural%20Network/Pytorch/ResNet.ipynb)]
 
-## Attention models 
+## Attention models
+
+
 Attention is a type of model that focus on specific area of image to generate output. For example, this is very helpful for image captioning where different object in different area of image is important to generate the caption.
--  
+
+- [Non local nets](Non-Local_Nets-Tensorflow)
